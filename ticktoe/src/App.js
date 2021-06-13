@@ -5,40 +5,60 @@ import "./styles/root.scss";
 import {calculateWinner} from './helpers'
 
  const App =()=>{
-  const [board,setBoard]=useState(Array(9).fill(null))
-  console.log(board);
+  const [history,setHistory]=useState(
+    [{board:Array(9).fill(null),isNext:true}
+    ]);
 
-  const [isNext,setIsNext]=useState(false);
+ const [currentMove,setCurrentMove]=useState(0);
+ 
+ const current =history[currentMove];
 
-  const winner= calculateWinner(board);
+ console.log(history)
+
+  // console.log(board);
+
+  // const [isNext,setIsNext]=useState(false);
+
+  const winner= calculateWinner(current.board);
   console.log(winner);
 
   const message=winner 
   ? `winner is ${winner}`
-  :` Next player is ${isNext ? 'X':'O'}`;
+  :` Next player is ${current.isNext ? 'X':'O'}`;
 
   const handleSquareClick=(position)=>{
-    if(board[position]||winner) return;// if there is any value there will be no upgration
-    setBoard ((prev)=>{
+    if(current.board[position]||winner){
+       return;
+      }// if there is any value there will be no upgration
+    
+    
+    
+      setHistory ((prev)=>{
 
-      return prev.map((square,pos)=>{
+        const last=prev[prev.length-1];
+
+
+      const newBoard=last.board.map((square,pos)=>{
         {/*for mapping */}
         if(pos=== position){
-          return  isNext ?'X':'O';
+          return  last.isNext ?'X':'O';
 
         }
         return square;
       });
+      return prev.concat({board:newBoard, isNext:!last.isNext});
 
     });
-    setIsNext(prev=>!prev);//update funtion of X and O
+
+    setCurrentMove(prev=>prev+1)
+    // setIsNext(prev=>!prev);//update funtion of X and O
   };
    return (
     <div className="app">
      <h1>Tic Toe</h1>
     
     <h2> {message}</h2>
-    <Board board={board} handleSquareClick={handleSquareClick}/>
+    <Board board={current.board} handleSquareClick={handleSquareClick}/>
   </div>
    );
  };
