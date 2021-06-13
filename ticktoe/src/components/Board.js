@@ -2,31 +2,9 @@ import React ,{useState} from 'react'
 
 import Square from './Square'
 
-const Board = () => {
-
-  const [board,setBoard]=useState(Array(9).fill(null))
-  console.log(board);
-
-  const [isNext,setIsNext]=useState(false)
+const Board = ({board,handleSquareClick}) => {
 
   
-
-  const handleSquareClick=(position)=>{
-    if(board[position]) return;// if there is any value there will be no upgration
-    setBoard ((prev)=>{
-
-      return prev.map((square,pos)=>{
-        {/*for mapping */}
-        if(pos=== position){
-          return  isNext ?'X':'O';
-
-        }
-        return square;
-      });
-
-    });
-    setIsNext(prev=>!prev);//update funtion of X and O
-  };
 
   const  renderSquare = position => {
     return(
